@@ -1,0 +1,228 @@
+﻿@using WebApp.Models.ViewModels
+@model PaginatedList<WebApp.Models.Entities.Film>
+
+@{
+    ViewData["Title"] = "Gestion des Films";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-5 fw-bold text-primary">
+                <i class="fas fa-film me-2"></i>Gestion des Films
+            </h1>
+            <p class="text-muted">Gérez votre catalogue de films</p>
+        </div>
+        <div>
+            <a asp-action="Create" class="btn btn-primary btn-lg shadow">
+                <i class="fas fa-plus me-2"></i>Nouveau film
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+        </div>
+    }
+
+    <!-- Filtres de recherche -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-light">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-search me-2"></i>Filtres de recherche
+            </h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Index" method="get">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="searchName" class="form-label fw-bold">Titre du film</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-film"></i></span>
+                            <input type="text" class="form-control" id="searchName" name="searchName"
+                                   value="@ViewBag.SearchName" placeholder="Rechercher par titre..." />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="searchType" class="form-label fw-bold">Genre</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-tags"></i></span>
+                            <input type="text" class="form-control" id="searchType" name="searchType"
+                                   value="@ViewBag.SearchType" placeholder="Rechercher par genre..." />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="searchYear" class="form-label fw-bold">Année</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            <input type="number" class="form-control" id="searchYear"
+                                   min="1800" name="searchYear" value="@ViewBag.SearchYear" 
+                                   placeholder="Ex: 2024" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-3 align-items-end">
+                    <div class="col-md-3">
+                        <label for="pageSize" class="form-label fw-bold">Éléments par page</label>
+                        <select name="pageSize" id="pageSize" class="form-select">
+                            @foreach (var size in new[] { 5, 10, 20, 50 })
+                            {
+                                <option value="@size" selected="@(size == Model.PageSize)">@size éléments</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-9 text-end">
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="fas fa-search me-2"></i>Rechercher
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-undo me-2"></i>Réinitialiser
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Résultats -->
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>Liste des films (@Model.Items.Count() sur @(Model.PageIndex * Model.PageSize))
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            @if (Model.Items.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" class="fw-bold">
+                                    <i class="fas fa-film me-2"></i>Titre
+                                </th>
+                                <th scope="col" class="fw-bold">
+                                    <i class="fas fa-calendar me-2"></i>Année
+                                </th>
+                                <th scope="col" class="fw-bold">
+                                    <i class="fas fa-tags me-2"></i>Genre
+                                </th>
+                                <th scope="col" class="text-center fw-bold" style="min-width: 200px;">
+                                    <i class="fas fa-cogs me-2"></i>Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td class="fw-medium">@item.Titre</td>
+                                    <td>
+                                        <span class="badge bg-secondary">@item.Annee</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info text-dark">@item.Genre</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="Actions">
+                                            <a asp-action="Details" asp-route-id="@item.Id" 
+                                               class="btn btn-outline-info" title="Voir les détails">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a asp-controller="Seances" asp-action="Index" asp-route-filmId="@item.Id"
+                                               class="btn btn-outline-success" title="Gérer les séances">
+                                                <i class="fas fa-ticket-alt"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" 
+                                               class="btn btn-outline-warning" title="Modifier">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" 
+                                               class="btn btn-outline-danger" title="Supprimer">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-film fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">Aucun film trouvé</h5>
+                    <p class="text-muted">Essayez d'ajuster vos critères de recherche ou ajoutez un nouveau film.</p>
+                    <a asp-action="Create" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Ajouter le premier film
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    @if (Model.Items.Any() && Model.TotalPages > 1)
+    {
+        <nav aria-label="Navigation des pages" class="mt-4">
+            <ul class="pagination justify-content-center">
+                @if (Model.HasPreviousPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { 
+                            pageNumber = Model.PageIndex - 1, 
+                            pageSize = Model.PageSize,
+                            searchName = ViewBag.SearchName,
+                            searchType = ViewBag.SearchType,
+                            searchYear = ViewBag.SearchYear
+                        })">
+                            <i class="fas fa-chevron-left me-1"></i>Précédent
+                        </a>
+                    </li>
+                }
+
+                @for (var i = Math.Max(1, Model.PageIndex - 2); i <= Math.Min(Model.TotalPages, Model.PageIndex + 2); i++)
+                {
+                    <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { 
+                            pageNumber = i, 
+                            pageSize = Model.PageSize,
+                            searchName = ViewBag.SearchName,
+                            searchType = ViewBag.SearchType,
+                            searchYear = ViewBag.SearchYear
+                        })">@i</a>
+                    </li>
+                }
+
+                @if (Model.HasNextPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { 
+                            pageNumber = Model.PageIndex + 1, 
+                            pageSize = Model.PageSize,
+                            searchName = ViewBag.SearchName,
+                            searchType = ViewBag.SearchType,
+                            searchYear = ViewBag.SearchYear
+                        })">
+                            Suivant<i class="fas fa-chevron-right ms-1"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>

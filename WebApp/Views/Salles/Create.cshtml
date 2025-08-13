@@ -1,0 +1,129 @@
+﻿@using WebApp.Models.ViewModels.Salle
+@model CreateSalleViewModel
+
+@{
+    ViewData["Title"] = "Nouvelle Salle";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- En-tête avec informations du cinéma -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-building me-2"></i>Cinéma : @ViewData["CurrentCinema"]
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Vous ajoutez une nouvelle salle pour ce cinéma.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>Ajouter une nouvelle salle
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Veuillez corriger les erreurs suivantes :</strong>
+                        </div>
+
+                        <!-- Champ caché pour transmettre le nom du cinéma -->
+                        <input type="hidden" name="cinemaNom" value="@ViewData["CurrentCinema"]" />
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Numero" class="form-control" placeholder="Numéro de salle" min="1" max="999" />
+                                    <label asp-for="Numero">
+                                        <i class="fas fa-hashtag me-2"></i>Numéro de salle
+                                    </label>
+                                    <span asp-validation-for="Numero" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Capacite" class="form-control" placeholder="Capacité" min="1" max="1000" />
+                                    <label asp-for="Capacite">
+                                        <i class="fas fa-users me-2"></i>Capacité (places)
+                                    </label>
+                                    <span asp-validation-for="Capacite" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <input asp-for="DateConstruction" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <label asp-for="DateConstruction">
+                                <i class="fas fa-calendar me-2"></i>Date de construction     
+                            </label>
+                            <span asp-validation-for="DateConstruction" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" asp-route-cinemaNom="@ViewData["CurrentCinema"]" class="btn btn-outline-secondary btn-lg me-md-2">
+                                <i class="fas fa-times me-2"></i>Annuler
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>Créer la salle
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Aide contextuelle -->
+            <div class="card mt-4 bg-light">
+                <div class="card-body">
+                    <h6 class="card-title">
+                        <i class="fas fa-info-circle me-2"></i>Conseils pour ajouter une salle
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li><strong>Numéro de salle :</strong> Doit être unique dans ce cinéma (1-999)</li>
+                        <li><strong>Capacité :</strong> Nombre de places disponibles (1-1000)</li>
+                        <li><strong>Date de construction :</strong> Date de mise en service de la salle</li>
+                        <li>Une fois créée, vous pourrez programmer des séances dans cette salle</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Animation au focus des champs
+        $(document).ready(function() {
+            $('.form-floating input').focus(function() {
+                $(this).closest('.form-floating').addClass('focused');
+            }).blur(function() {
+                $(this).closest('.form-floating').removeClass('focused');
+            });
+        });
+    </script>
+    
+    <style>
+        .form-floating.focused {
+            transform: scale(1.02);
+            transition: transform 0.2s ease;
+        }
+        
+        .card {
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+    </style>
+}

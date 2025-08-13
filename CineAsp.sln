@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36401.2
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{CF36B24B-2266-4810-BCE6-85A3A9D72A97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{92EEF13F-2306-4E4E-8EAF-90342CE51EFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E2ETests", "E2ETests\E2ETests.csproj", "{9B23605E-A05F-4135-9CCF-FD8255E3C78D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CF36B24B-2266-4810-BCE6-85A3A9D72A97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF36B24B-2266-4810-BCE6-85A3A9D72A97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF36B24B-2266-4810-BCE6-85A3A9D72A97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF36B24B-2266-4810-BCE6-85A3A9D72A97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92EEF13F-2306-4E4E-8EAF-90342CE51EFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92EEF13F-2306-4E4E-8EAF-90342CE51EFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92EEF13F-2306-4E4E-8EAF-90342CE51EFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92EEF13F-2306-4E4E-8EAF-90342CE51EFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B23605E-A05F-4135-9CCF-FD8255E3C78D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B23605E-A05F-4135-9CCF-FD8255E3C78D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B23605E-A05F-4135-9CCF-FD8255E3C78D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B23605E-A05F-4135-9CCF-FD8255E3C78D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CBEB5A64-9832-4C3C-9DE4-C914E258F28E}
+	EndGlobalSection
+EndGlobal

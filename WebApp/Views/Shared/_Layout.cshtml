@@ -1,0 +1,241 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using WebApp.Models.Entities
+
+@{
+    ViewData["AppName"] = "Ciné+";
+    var search = ViewBag.Search as string;
+}
+
+@inject SignInManager<Admin> SignInManager
+@inject UserManager<Admin> UserManager
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @ViewData["AppName"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <style>
+        /* ==========================================================================
+           THÈME CINÉMA - Variables CSS personnalisées
+           ========================================================================== */
+        :root {
+            --cinema-primary: #e50914;    /* Rouge caractéristique du cinéma */
+            --cinema-secondary: #221f1f;  /* Noir/gris foncé pour les éléments secondaires */
+            --cinema-gold: #ffd700;       /* Doré pour les accents premium */
+        }
+        
+        /* ==========================================================================
+           NAVIGATION ET BRANDING
+           ========================================================================== */
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--cinema-primary) !important;
+        }
+        
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.1); /* Ombre subtile pour la profondeur */
+        }
+        
+        /* ==========================================================================
+           COULEURS GLOBALES ET THÈME
+           ========================================================================== */
+        body {
+            background-color: #f8f9fa; /* Fond gris très clair pour le contraste */
+        }
+        
+        /* Surcharge des couleurs primaires de Bootstrap avec le thème cinéma */
+        .btn-primary {
+            background-color: var(--cinema-primary);
+            border-color: var(--cinema-primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: #b8070f; /* Version plus sombre au survol */
+            border-color: #b8070f;
+        }
+        
+        .text-primary {
+            color: var(--cinema-primary) !important;
+        }
+        
+        .bg-primary {
+            background-color: var(--cinema-primary) !important;
+        }
+        
+        /* ==========================================================================
+           COMPOSANTS INTERFACE UTILISATEUR
+           ========================================================================== */
+        .footer {
+            background-color: var(--cinema-secondary);
+            color: white;
+        }
+        
+        .card {
+            border: none;              /* Supprime les bordures par défaut */
+            border-radius: 10px;       /* Coins arrondis modernes */
+        }
+        
+        /* Effet de survol pour les lignes de tableau - feedback visuel subtil */
+        .table-hover tbody tr:hover {
+            background-color: rgba(229, 9, 20, 0.1); /* Rouge transparent */
+        }
+        
+        /* ==========================================================================
+           ANIMATIONS ET TRANSITIONS
+           ========================================================================== */
+        /* Animation d'entrée pour les alertes - améliore la perception du feedback */
+        .alert {
+            animation: slideInDown 0.5s ease-out;
+        }
+        
+        @@keyframes slideInDown {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-film me-2"></i>@ViewData["AppName"]
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Basculer la navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home me-1"></i>Accueil
+                            </a>
+                        </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-cogs me-1"></i>Administration
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Administration" asp-action="Index">
+                                            <i class="fas fa-tachometer-alt me-2"></i>Tableau de bord
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Cinemas" asp-action="Index">
+                                            <i class="fas fa-building me-2"></i>Gestion des cinémas
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Films" asp-action="Index">
+                                            <i class="fas fa-film me-2"></i>Gestion des films
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                    <partial name="_LoginPartial"/>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="container-fluid">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-white mt-5">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5><i class="fas fa-film me-2"></i>@ViewData["AppName"]</h5>
+                    <p class="mb-0">Votre plateforme de gestion de cinémas nouvelle génération</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <p class="mb-1">
+                        <i class="fas fa-calendar me-2"></i>&copy; @DateTime.Now.Year - @ViewData["AppName"]
+                    </p>
+                    <p class="mb-0">
+                        <small>
+                            <i class="fas fa-code me-1"></i>Développé avec ASP.NET Core
+                        </small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <!-- Scripts personnalisés -->
+    <script>
+        // Animation des cartes au survol - Améliore l'expérience utilisateur
+        $(document).ready(function() {
+            // Ajoute un effet d'ombre au survol des cartes pour un feedback visuel
+            $('.card').hover(
+                function() { $(this).addClass('shadow-lg'); },
+                function() { $(this).removeClass('shadow-lg'); }
+            );
+            
+            // GESTION INTELLIGENTE DES ALERTES
+            // Auto-dismiss uniquement pour les alertes de type TempData/Success temporaires
+            // PRESERVATION : Les alertes persistent si elles ont la classe 'alert-persistent' ou sont dans les pages Identity
+            $('.alert:not(.alert-persistent):not(.alert-danger)').each(function() {
+                var $alert = $(this);
+                
+                // Ne pas faire disparaître les alertes qui contiennent des liens importants ou des formulaires
+                // Ces alertes nécessitent une interaction utilisateur
+                if ($alert.find('a, button, input').length > 0) {
+                    return; // Skip cette alerte
+                }
+                
+                // Ne pas faire disparaître les alertes dans les pages Identity
+                // Ces pages gèrent leur propre logique d'affichage d'alertes
+                if (window.location.pathname.includes('/Identity/')) {
+                    return; // Skip cette alerte
+                }
+                
+                // Faire disparaître seulement les alertes de feedback temporaire (TempData)
+                // Ces alertes sont généralement des confirmations d'actions réussies
+                if ($alert.hasClass('alert-dismissible')) {
+                    $alert.delay(5000).fadeOut();
+                }
+            });
+            
+            // CONFIRMATION DE SUPPRESSION
+            // Ajoute une confirmation JavaScript pour toutes les actions de suppression
+            // Évite les suppressions accidentelles en demandant confirmation à l'utilisateur
+            $('a[href*="Delete"], button[formaction*="Delete"]').click(function(e) {
+                if (!confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')) {
+                    e.preventDefault(); // Annule l'action si l'utilisateur refuse
+                }
+            });
+        });
+    </script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

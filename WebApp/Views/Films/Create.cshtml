@@ -1,0 +1,128 @@
+﻿@using WebApp.Models.ViewModels.Film
+@model CreateFilmViewModel
+
+@{
+    ViewData["Title"] = "Nouveau Film";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>Ajouter un nouveau film
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Veuillez corriger les erreurs suivantes :</strong>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Titre" class="form-control" placeholder="Titre du film" />
+                                    <label asp-for="Titre">
+                                        <i class="fas fa-film me-2"></i>Titre du film
+                                    </label>
+                                    <span asp-validation-for="Titre" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Annee" class="form-control" placeholder="Année" min="1800" max="2100" />
+                                    <label asp-for="Annee">
+                                        <i class="fas fa-calendar me-2"></i>Année de sortie
+                                    </label>
+                                    <span asp-validation-for="Annee" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <input asp-for="Genre" class="form-control" placeholder="Genre" list="genres" />
+                            <label asp-for="Genre">
+                                <i class="fas fa-tags me-2"></i>Genre du film
+                            </label>
+                            <datalist id="genres">
+                                <option value="Action"></option>
+                                <option value="Aventure"></option>
+                                <option value="Comédie"></option>
+                                <option value="Drame"></option>
+                                <option value="Horreur"></option>
+                                <option value="Romance"></option>
+                                <option value="Science-fiction"></option>
+                                <option value="Thriller"></option>
+                                <option value="Animation"></option>
+                                <option value="Documentaire"></option>
+                                <option value="Fantastique"></option>
+                                <option value="Guerre"></option>
+                                <option value="Historique"></option>
+                                <option value="Musical"></option>
+                                <option value="Western"></option>
+                            </datalist>
+                            <span asp-validation-for="Genre" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg me-md-2">
+                                <i class="fas fa-times me-2"></i>Annuler
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>Créer le film
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Aide contextuelle -->
+            <div class="card mt-4 bg-light">
+                <div class="card-body">
+                    <h6 class="card-title">
+                        <i class="fas fa-info-circle me-2"></i>Conseils pour ajouter un film
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>Le titre doit être unique et représentatif du film</li>
+                        <li>L'année doit être comprise entre 1800 et 2100</li>
+                        <li>Utilisez la liste déroulante pour sélectionner un genre populaire</li>
+                        <li>Tous les champs sont obligatoires</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Animation au focus des champs
+        $(document).ready(function() {
+            $('.form-floating input').focus(function() {
+                $(this).closest('.form-floating').addClass('focused');
+            }).blur(function() {
+                $(this).closest('.form-floating').removeClass('focused');
+            });
+        });
+    </script>
+    
+    <style>
+        .form-floating.focused {
+            transform: scale(1.02);
+            transition: transform 0.2s ease;
+        }
+        
+        .card {
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+    </style>
+}

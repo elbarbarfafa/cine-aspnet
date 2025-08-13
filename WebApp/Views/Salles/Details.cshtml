@@ -1,0 +1,37 @@
+﻿@model WebApp.Models.Entities.Salle
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Salle</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Capacite)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Capacite)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DateConstruction)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DateConstruction)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Cinema)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Cinema.Nom)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-cinemaNom="@Model.CinemaNom" asp-route-numero="@Model.Numero" class="btn btn-warning">Edit</a> |
+    <a asp-action="Index" asp-route-cinemaNom="@ViewData["CurrentCinema"]">Back to List</a>
+</div>

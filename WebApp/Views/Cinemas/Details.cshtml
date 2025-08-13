@@ -1,0 +1,33 @@
+﻿@model WebApp.Models.Entities.Cinema
+
+@{
+    ViewData["Title"] = Model.Nom;
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Cinema @Model.Nom</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Rue)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Rue)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Numero)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Numero)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-controller="Salles" asp-action="Index" asp-route-cinemaNom="@Model.Nom" class="btn btn-primary">
+        Voir les salles</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Nom">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+

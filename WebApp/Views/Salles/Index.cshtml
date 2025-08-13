@@ -1,0 +1,149 @@
+﻿@using WebApp.Models.Entities
+@using WebApp.Models.ViewModels
+
+@model PaginatedList<Salle>
+
+@{
+    ViewData["Title"] = "Salles";
+}
+
+<h1>Salles du cinéma @ViewData["CurrentCinema"]</h1>
+
+<p>
+    <a asp-action="Create" asp-route-cinemaNom="@ViewData["CurrentCinema"]" class="btn btn-primary">Nouvelle salle</a>
+</p>
+
+<form asp-action="Index" method="get" class="mb-3">
+    <input type="hidden" name="cinemaNom" value="@ViewData["CurrentCinema"]" />
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Filtre par capacité</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="capaciteMin">Capacité minimum</label>
+                                <input type="number" class="form-control" id="capaciteMin" name="capaciteMin"
+                                       min="0" value="@ViewBag.CapaciteMin" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="capaciteMax">Capacité maximum</label>
+                                <input type="number" class="form-control" id="capaciteMax" name="capaciteMax"
+                                       min="0" value="@ViewBag.CapaciteMax" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Filtre par date de construction</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="dateConstructionDebut">Date début</label>
+                                <input type="date" class="form-control" id="dateConstructionDebut"
+                                       name="dateConstructionDebut" value="@ViewBag.DateConstructionDebut?.ToString("yyyy-MM-dd")" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="dateConstructionFin">Date fin</label>
+                                <input type="date" class="form-control" id="dateConstructionFin"
+                                       name="dateConstructionFin" value="@ViewBag.DateConstructionFin?.ToString("yyyy-MM-dd")" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <select name="pageSize" class="form-select" style="max-width:120px;">
+                @foreach (var size in new[] { 5, 10, 20, 50 })
+                {
+                    <option value="@size" selected="@(size == Model.PageSize)">@size / page</option>
+                }
+            </select>
+        </div>
+        <div class="col text-end">
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+            <a asp-action="Index" asp-route-cinemaNom="@ViewData["CurrentCinema"]" class="btn btn-secondary">Réinitialiser</a>
+        </div>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Numéro</th>
+            <th>Capacité</th>
+            <th>Date de construction</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Numero)</td>
+                <td>@Html.DisplayFor(modelItem => item.Capacite)</td>
+                <td>@Html.DisplayFor(modelItem => item.DateConstruction)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-cinemaNom="@item.CinemaNom" asp-route-numero="@item.Numero" 
+                       class="btn btn-sm btn-warning">Modifier</a>
+                    <a asp-action="Details" asp-route-cinemaNom="@item.CinemaNom" asp-route-numero="@item.Numero" 
+                       class="btn btn-sm btn-info">Détails</a>
+                    <a asp-action="Delete" asp-route-cinemaNom="@item.CinemaNom" asp-route-numero="@item.Numero" 
+                       class="btn btn-sm btn-danger">Supprimer</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <pagination-route page-number="@(Model.PageIndex - 1)">Précédent</pagination-route>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">Précédent</span>
+            </li>
+        }
+
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                <pagination-route page-number="@i">@i</pagination-route>
+            </li>
+        }
+
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <pagination-route page-number="@(Model.PageIndex + 1)">Suivant</pagination-route>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">Suivant</span>
+            </li>
+        }
+    </ul>
+</nav>
+

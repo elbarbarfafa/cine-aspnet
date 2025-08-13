@@ -1,0 +1,152 @@
+﻿@using WebApp.Models.ViewModels.Salle
+@model EditSalleViewModel
+
+@{
+    ViewData["Title"] = "Modifier la Salle";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- En-tête avec informations du cinéma -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-building me-2"></i>Cinéma : @ViewData["CurrentCinema"]
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">
+                        <i class="fas fa-door-open me-2"></i>
+                        Modification de la salle n°@ViewBag.SalleNumero
+                    </p>
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>Modifier la salle
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Veuillez corriger les erreurs suivantes :</strong>
+                        </div>
+
+                        <!-- Champs cachés pour transmettre le cinéma et le numéro de salle -->
+                        <input type="hidden" name="cinemaNom" value="@ViewData["CurrentCinema"]" />
+                        <input type="hidden" name="numero" value="@ViewBag.SalleNumero" />
+
+                        <div class="alert alert-info" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Note :</strong> Le numéro de salle ne peut pas être modifié. 
+                            Seules la capacité et la date de construction peuvent être mises à jour.
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input value="@ViewBag.SalleNumero" class="form-control" disabled />
+                                    <label>
+                                        <i class="fas fa-hashtag me-2"></i>Numéro de salle (non modifiable
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Capacite" class="form-control" placeholder="Capacité" min="1" max="1000" />
+                                    <label asp-for="Capacite">
+                                        
+                                        <i class="fas fa-users me-2"></i>Capacité (places)
+                                        
+                                        
+                                    </label>
+                                    <span asp-validation-for="Capacite" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <input asp-for="DateConstruction" class="form-control" type="date" />
+                            <label asp-for="DateConstruction">
+                                <i class="fas fa-calendar me-2"></i>Date de construction
+                                
+                                
+                            </label>
+                            <span asp-validation-for="DateConstruction" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" asp-route-cinemaNom="@ViewData["CurrentCinema"]" class="btn btn-outline-secondary btn-lg me-md-2">
+                                <i class="fas fa-times me-2"></i>Annuler
+                            </a>
+                            <button type="submit" class="btn btn-warning btn-lg text-dark">
+                                <i class="fas fa-save me-2"></i>Sauvegarder les modifications
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Informations sur la salle -->
+            <div class="card mt-4 bg-light">
+                <div class="card-body">
+                    <h6 class="card-title">
+                        <i class="fas fa-door-open me-2"></i>Informations sur la salle
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-1 small">
+                                <strong>Cinéma :</strong> @ViewData["CurrentCinema"]
+                            </p>
+                            <p class="mb-1 small">
+                                <strong>Numéro de salle :</strong> @ViewBag.SalleNumero
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1 small">
+                                <strong>Capacité actuelle :</strong> @Model.Capacite places
+                            </p>
+                            <p class="mb-1 small">
+                                <strong>Date de construction :</strong> @Model.DateConstruction.ToString("dd/MM/yyyy")
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Animation au focus des champs
+        $(document).ready(function() {
+            $('.form-floating input:not([disabled])').focus(function() {
+                $(this).closest('.form-floating').addClass('focused');
+            }).blur(function() {
+                $(this).closest('.form-floating').removeClass('focused');
+            });
+        });
+    </script>
+    
+    <style>
+        .form-floating.focused {
+            transform: scale(1.02);
+            transition: transform 0.2s ease;
+        }
+        
+        .card {
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+    </style>
+}

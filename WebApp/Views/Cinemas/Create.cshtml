@@ -1,0 +1,111 @@
+﻿@using WebApp.Models.ViewModels.Cinema
+@model CreateCinemaViewModel
+
+@{
+    ViewData["Title"] = "Nouveau Cinéma";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>Ajouter un nouveau cinéma
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Veuillez corriger les erreurs suivantes :</strong>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <input asp-for="Nom" class="form-control" placeholder="Nom du cinéma" />
+                            <label asp-for="Nom">
+                                <i class="fas fa-building me-2"></i>Nom du cinéma
+                            </label>
+                            <span asp-validation-for="Nom" class="text-danger"></span>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Rue" class="form-control" placeholder="Nom de la rue" />
+                                    <label asp-for="Rue">
+                                        <i class="fas fa-road me-2"></i>Nom de la rue (optionnel)
+                                    </label>
+                                    <span asp-validation-for="Rue" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Numero" class="form-control" placeholder="Numéro" min="1" max="9999" />
+                                    <label asp-for="Numero">
+                                        <i class="fas fa-hashtag me-2"></i>Numéro d'adresse
+                                    </label>
+                                    <span asp-validation-for="Numero" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg me-md-2">
+                                <i class="fas fa-times me-2"></i>Annuler
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>Créer le cinéma
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Aide contextuelle -->
+            <div class="card mt-4 bg-light">
+                <div class="card-body">
+                    <h6 class="card-title">
+                        <i class="fas fa-info-circle me-2"></i>Conseils pour ajouter un cinéma
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li><strong>Nom du cinéma :</strong> Choisissez un nom unique et facilement identifiable</li>
+                        <li><strong>Adresse :</strong> Le nom de la rue est optionnel, mais le numéro est obligatoire</li>
+                        <li><strong>Numéro :</strong> Doit être compris entre 1 et 9999</li>
+                        <li>Une fois créé, vous pourrez ajouter des salles à ce cinéma</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Animation au focus des champs
+        $(document).ready(function() {
+            $('.form-floating input').focus(function() {
+                $(this).closest('.form-floating').addClass('focused');
+            }).blur(function() {
+                $(this).closest('.form-floating').removeClass('focused');
+            });
+        });
+    </script>
+    
+    <style>
+        .form-floating.focused {
+            transform: scale(1.02);
+            transition: transform 0.2s ease;
+        }
+        
+        .card {
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+    </style>
+}

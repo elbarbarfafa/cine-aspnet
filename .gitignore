@@ -1,0 +1,11 @@
+﻿################################################################################
+# Ce fichier .gitignore a été automatiquement créé par Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/E2ETests/obj
+/E2ETests/bin/Debug/net9.0
+/UnitTests/bin/Debug/net9.0
+/UnitTests/obj
+/WebApp/bin/Debug/net9.0
+/WebApp/obj

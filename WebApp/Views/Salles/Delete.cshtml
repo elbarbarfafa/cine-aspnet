@@ -1,0 +1,41 @@
+﻿@model WebApp.Models.Entities.Salle
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Salle</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Capacite)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Capacite)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DateConstruction)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DateConstruction)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Cinema)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Cinema.Nom)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="CinemaNom" />
+        <input type="hidden" asp-for="Numero" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index" asp-route-cinemaNom="@ViewData["CurrentCinema"]">Back to List</a>
+    </form>
+</div>

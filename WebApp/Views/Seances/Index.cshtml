@@ -1,0 +1,279 @@
+@using WebApp.Models.ViewModels
+@model PaginatedList<WebApp.Models.Entities.Seance>
+
+@{
+    ViewData["Title"] = "Gestion des Séances";
+    var currentFilm = ViewData["CurrentFilm"] as WebApp.Models.Entities.Film;
+}
+
+<div class="container-fluid">
+    <!-- En-tête avec informations du film -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-dark text-white">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h4 class="mb-0">
+                        <i class="fas fa-ticket-alt me-2"></i>Séances pour "@currentFilm?.Titre"
+                    </h4>
+                </div>
+                <div class="col-auto">
+                    <span class="badge bg-light text-dark fs-6">
+                        <i class="fas fa-calendar me-1"></i>@currentFilm?.Annee
+                    </span>
+                    <span class="badge bg-info fs-6">
+                        <i class="fas fa-tags me-1"></i>@currentFilm?.Genre
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body bg-light">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h6 class="text-muted mb-1">Informations du film</h6>
+                    <p class="mb-0">Gérez toutes les séances programmées pour ce film dans votre réseau de cinémas.</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <a asp-action="Create" asp-route-filmId="@ViewBag.FilmId" class="btn btn-primary me-2">
+                        <i class="fas fa-plus me-2"></i>Nouvelle séance
+                    </a>
+                    <a asp-controller="Films" asp-action="Details" asp-route-id="@ViewBag.FilmId" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Retour au film
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+        </div>
+    }
+
+    <!-- Filtres de recherche -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-light">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-filter me-2"></i>Filtres de recherche
+            </h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Index" method="get">
+                <input type="hidden" name="filmId" value="@ViewBag.FilmId" />
+                
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="salleCinemaNom" class="form-label fw-bold">
+                            <i class="fas fa-building me-1"></i>Cinéma
+                        </label>
+                        <input type="text" class="form-control" id="salleCinemaNom" name="salleCinemaNom"
+                               value="@ViewBag.SalleCinemaNom" placeholder="Nom du cinéma..." />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="salleNumero" class="form-label fw-bold">
+                            <i class="fas fa-door-open me-1"></i>N° Salle
+                        </label>
+                        <input type="number" class="form-control" id="salleNumero" name="salleNumero"
+                               value="@ViewBag.SalleNumero" min="1" placeholder="N°..." />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="dateSeance" class="form-label fw-bold">
+                            <i class="fas fa-calendar me-1"></i>Date de séance
+                        </label>
+                        <input type="date" class="form-control" id="dateSeance" name="dateSeance"
+                               value="@ViewBag.DateSeance?.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="pageSize" class="form-label fw-bold">Éléments par page</label>
+                        <select name="pageSize" id="pageSize" class="form-select">
+                            @foreach (var size in new[] { 5, 10, 20, 50 })
+                            {
+                                <option value="@size" selected="@(size == Model.PageSize)">@size éléments</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row mt-3">
+                    <div class="col text-end">
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="fas fa-search me-2"></i>Filtrer
+                        </button>
+                        <a asp-action="Index" asp-route-filmId="@ViewBag.FilmId" class="btn btn-outline-secondary">
+                            <i class="fas fa-undo me-2"></i>Réinitialiser
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Liste des séances -->
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>Séances programmées (@Model.Items.Count() résultat(s))
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            @if (Model.Items.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" class="fw-bold">
+                                    <i class="fas fa-building me-2"></i>Cinéma / Salle
+                                </th>
+                                <th scope="col" class="fw-bold">
+                                    <i class="fas fa-calendar me-2"></i>Date
+                                </th>
+                                <th scope="col" class="fw-bold">
+                                    <i class="fas fa-clock me-2"></i>Horaire
+                                </th>
+                                <th scope="col" class="fw-bold">
+                                    <i class="fas fa-euro-sign me-2"></i>Tarif
+                                </th>
+                                <th scope="col" class="text-center fw-bold" style="min-width: 200px;">
+                                    <i class="fas fa-cogs me-2"></i>Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <strong>@item.Salle.CinemaNom</strong>
+                                            <br>
+                                            <small class="text-muted">
+                                                <i class="fas fa-door-open me-1"></i>Salle @item.Salle.Numero 
+                                                (@item.Salle.Capacite places)
+                                            </small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary fs-6">
+                                            @item.DateSeance.ToString("dd/MM/yyyy")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info fs-6">
+                                            @item.Horaire.HeureDebut.ToString(@"hh\:mm") - @item.Horaire.HeureFin.ToString(@"hh\:mm")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success fs-6">
+                                            @item.Tarif.ToString("C")
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="Actions">
+                                            <a asp-action="Details" asp-route-filmId="@ViewBag.FilmId" asp-route-id="@item.Id" 
+                                               class="btn btn-outline-info" title="Voir les détails">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-filmId="@ViewBag.FilmId" asp-route-id="@item.Id" 
+                                               class="btn btn-outline-warning" title="Modifier">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-filmId="@ViewBag.FilmId" asp-route-id="@item.Id" 
+                                               class="btn btn-outline-danger" title="Supprimer">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-ticket-alt fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">Aucune séance programmée</h5>
+                    <p class="text-muted">
+                        @if (ViewBag.SalleCinemaNom != null || ViewBag.SalleNumero != null || ViewBag.DateSeance != null)
+                        {
+                            <span>Aucune séance ne correspond à vos critères de recherche.</span>
+                        }
+                        else
+                        {
+                            <span>Commencez par programmer la première séance pour ce film.</span>
+                        }
+                    </p>
+                    <a asp-action="Create" asp-route-filmId="@ViewBag.FilmId" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Programmer la première séance
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    @if (Model.Items.Any() && Model.TotalPages > 1)
+    {
+        <nav aria-label="Navigation des pages" class="mt-4">
+            <ul class="pagination justify-content-center">
+                @if (Model.HasPreviousPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { 
+                            filmId = ViewBag.FilmId,
+                            pageNumber = Model.PageIndex - 1, 
+                            pageSize = Model.PageSize,
+                            salleCinemaNom = ViewBag.SalleCinemaNom,
+                            salleNumero = ViewBag.SalleNumero,
+                            dateSeance = ViewBag.DateSeance?.ToString("yyyy-MM-dd")
+                        })">
+                            <i class="fas fa-chevron-left me-1"></i>Précédent
+                        </a>
+                    </li>
+                }
+
+                @for (var i = Math.Max(1, Model.PageIndex - 2); i <= Math.Min(Model.TotalPages, Model.PageIndex + 2); i++)
+                {
+                    <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { 
+                            filmId = ViewBag.FilmId,
+                            pageNumber = i, 
+                            pageSize = Model.PageSize,
+                            salleCinemaNom = ViewBag.SalleCinemaNom,
+                            salleNumero = ViewBag.SalleNumero,
+                            dateSeance = ViewBag.DateSeance?.ToString("yyyy-MM-dd")
+                        })">@i</a>
+                    </li>
+                }
+
+                @if (Model.HasNextPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { 
+                            filmId = ViewBag.FilmId,
+                            pageNumber = Model.PageIndex + 1, 
+                            pageSize = Model.PageSize,
+                            salleCinemaNom = ViewBag.SalleCinemaNom,
+                            salleNumero = ViewBag.SalleNumero,
+                            dateSeance = ViewBag.DateSeance?.ToString("yyyy-MM-dd")
+                        })">
+                            Suivant<i class="fas fa-chevron-right ms-1"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>

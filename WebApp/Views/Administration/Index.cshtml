@@ -1,0 +1,214 @@
+﻿@{
+    ViewData["Title"] = "Administration";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- En-tête principal -->
+            <div class="text-center mb-5">
+                <h1 class="display-4 fw-bold text-primary mb-3">
+                    <i class="fas fa-cogs me-3"></i>Panneau d'Administration
+                </h1>
+                <p class="lead text-muted">
+                    Gérez efficacement votre réseau de cinémas, films et séances
+                </p>
+            </div>
+
+            <!-- Statistiques rapides -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white h-100 shadow">
+                        <div class="card-body text-center">
+                            <i class="fas fa-building fa-2x mb-3"></i>
+                            <h4>Cinémas</h4>
+                            <p class="mb-0">Gérez vos établissements</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white h-100 shadow">
+                        <div class="card-body text-center">
+                            <i class="fas fa-film fa-2x mb-3"></i>
+                            <h4>Films</h4>
+                            <p class="mb-0">Catalogue des films</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white h-100 shadow">
+                        <div class="card-body text-center">
+                            <i class="fas fa-door-open fa-2x mb-3"></i>
+                            <h4>Salles</h4>
+                            <p class="mb-0">Configuration des salles</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-dark h-100 shadow">
+                        <div class="card-body text-center">
+                            <i class="fas fa-ticket-alt fa-2x mb-3"></i>
+                            <h4>Séances</h4>
+                            <p class="mb-0">Programmation des séances</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modules d'administration -->
+            <div class="row g-4">
+                <!-- Gestion des Cinémas -->
+                <div class="col-lg-6">
+                    <div class="card h-100 shadow-sm hover-card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-building me-2"></i>Gestion des Cinémas
+                            </h5>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <p class="card-text flex-grow-1">
+                                Administrez votre réseau de cinémas : ajout, modification, suppression 
+                                et gestion des informations d'adresse.
+                            </p>
+                            <div class="mt-auto">
+                                <h6 class="text-muted mb-2">Actions rapides :</h6>
+                                <div class="d-grid gap-2">
+                                    <a href="/Cinemas/Index" class="btn btn-primary">
+                                        <i class="fas fa-list me-2"></i>Liste des cinémas
+                                    </a>
+                                    <a href="/Cinemas/Create" class="btn btn-outline-primary">
+                                        <i class="fas fa-plus me-2"></i>Nouveau cinéma
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gestion des Films -->
+                <div class="col-lg-6">
+                    <div class="card h-100 shadow-sm hover-card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-film me-2"></i>Gestion des Films
+                            </h5>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <p class="card-text flex-grow-1">
+                                Gérez votre catalogue de films : titre, année de sortie, genre, 
+                                et programmation des séances.
+                            </p>
+                            <div class="mt-auto">
+                                <h6 class="text-muted mb-2">Actions rapides :</h6>
+                                <div class="d-grid gap-2">
+                                    <a href="/Films/Index" class="btn btn-success">
+                                        <i class="fas fa-list me-2"></i>Catalogue des films
+                                    </a>
+                                    <a href="/Films/Create" class="btn btn-outline-success">
+                                        <i class="fas fa-plus me-2"></i>Nouveau film
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Raccourcis utiles -->
+            <div class="card mt-5 bg-light">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shortcuts me-2"></i>Raccourcis utiles
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="d-grid">
+                                <a href="/Films/Index" class="btn btn-outline-secondary">
+                                    <i class="fas fa-search me-2"></i>Rechercher un film
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-grid">
+                                <a href="/Cinemas/Index" class="btn btn-outline-secondary">
+                                    <i class="fas fa-map-marker-alt me-2"></i>Localiser un cinéma
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-grid">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#helpModal">
+                                    <i class="fas fa-question-circle me-2"></i>Guide d'utilisation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal d'aide -->
+<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="helpModalLabel">
+                    <i class="fas fa-question-circle me-2"></i>Guide d'utilisation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-building text-primary me-2"></i>Gestion des Cinémas</h6>
+                        <ul class="list-unstyled ms-3">
+                            <li>• Ajouter de nouveaux établissements</li>
+                            <li>• Modifier les adresses</li>
+                            <li>• Gérer les salles par cinéma</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-film text-success me-2"></i>Gestion des Films</h6>
+                        <ul class="list-unstyled ms-3">
+                            <li>• Enrichir le catalogue</li>
+                            <li>• Classifier par genre et année</li>
+                            <li>• Programmer les séances</li>
+                        </ul>
+                    </div>
+                </div>
+                <hr>
+                <h6><i class="fas fa-lightbulb text-warning me-2"></i>Conseils d'utilisation</h6>
+                <ul class="list-unstyled">
+                    <li>• Commencez par créer vos cinémas, puis ajoutez les salles</li>
+                    <li>• Enrichissez votre catalogue de films avant de programmer</li>
+                    <li>• Utilisez les filtres de recherche pour trouver rapidement les éléments</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <style>
+        .hover-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .hover-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+        
+        .card-header {
+            border-bottom: none;
+        }
+    </style>
+}
+

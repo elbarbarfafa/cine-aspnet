@@ -1,0 +1,67 @@
+@model WebApp.Models.Entities.Seance
+
+@{
+    ViewData["Title"] = "Détails de la séance";
+    var currentFilm = ViewData["CurrentFilm"] as WebApp.Models.Entities.Film;
+}
+
+<h1>Détails de la séance</h1>
+
+<div class="card">
+    <div class="card-header">
+        <h4>Séance #@Model.Id - @currentFilm?.Titre</h4>
+    </div>
+    <div class="card-body">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title">@currentFilm?.Titre (@currentFilm?.Annee)</h5>
+                        <p class="card-text"><strong>Genre :</strong> @currentFilm?.Genre</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Date :</dt>
+                    <dd class="col-sm-8">@Model.DateSeance.ToString("dddd dd MMMM yyyy")</dd>
+                    
+                    <dt class="col-sm-4">Horaire :</dt>
+                    <dd class="col-sm-8">@Model.Horaire.HeureDebut.ToString(@"hh\:mm") - @Model.Horaire.HeureFin.ToString(@"hh\:mm")</dd>
+                    
+                    <dt class="col-sm-4">Tarif :</dt>
+                    <dd class="col-sm-8"><strong>@Model.Tarif.ToString("C")</strong></dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Cinéma :</dt>
+                    <dd class="col-sm-8">@Model.Salle.CinemaNom</dd>
+                    
+                    <dt class="col-sm-4">Salle :</dt>
+                    <dd class="col-sm-8">Salle n°@Model.Salle.Numero</dd>
+                    
+                    <dt class="col-sm-4">Capacité :</dt>
+                    <dd class="col-sm-8">@Model.Salle.Capacite places</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Edit" asp-route-filmId="@currentFilm?.Id" asp-route-id="@Model.Id" class="btn btn-warning">
+            <i class="fas fa-edit"></i> Modifier
+        </a>
+        <a asp-action="Delete" asp-route-filmId="@currentFilm?.Id" asp-route-id="@Model.Id" class="btn btn-danger">
+            <i class="fas fa-trash"></i> Supprimer
+        </a>
+        <a asp-action="Index" asp-route-filmId="@currentFilm?.Id" class="btn btn-secondary">
+            <i class="fas fa-list"></i> Retour à la liste
+        </a>
+        <a asp-controller="Films" asp-action="Details" asp-route-id="@currentFilm?.Id" class="btn btn-outline-secondary">
+            <i class="fas fa-film"></i> Retour au film
+        </a>
+    </div>
+</div>
