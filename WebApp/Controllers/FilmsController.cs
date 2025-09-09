@@ -14,9 +14,9 @@ using WebApp.Services;
 namespace WebApp.Controllers
 {
     [Authorize(Roles = "admin")]
-    public class FilmsController(FilmService filmService) : Controller
+    public class FilmsController(IFilmService filmService) : Controller
     {
-        private readonly FilmService _filmService = filmService;
+        private readonly IFilmService _filmService = filmService;
 
         public IActionResult Index(
             string? searchName,

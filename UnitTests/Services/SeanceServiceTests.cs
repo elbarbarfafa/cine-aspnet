@@ -7,13 +7,14 @@ namespace UnitTests.Services
 {
     public class SeanceServiceTests
     {
-        private readonly SeanceService _seanceService;
+        private readonly ISeanceService _seanceService;
+        private readonly Mock<ISeanceRepository> _mockRepository;
 
         public SeanceServiceTests()
         {
-            // Utiliser un mock simple du repository pour éviter les problèmes EF
-            var mockRepository = new Mock<SeanceRepository>(Mock.Of<MyContext>());
-            _seanceService = new SeanceService(mockRepository.Object);
+            // Utiliser un mock de l'interface du repository
+            _mockRepository = new Mock<ISeanceRepository>();
+            _seanceService = new SeanceService(_mockRepository.Object);
         }
 
         [Fact]

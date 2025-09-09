@@ -5,9 +5,9 @@ using WebApp.Repositories;
 
 namespace WebApp.Services
 {
-    public class SeanceService(SeanceRepository seanceRepository) : ICrudService<Seance, int>, IPaginatedService<Seance, BasePaginationParams, SeanceFilterModel>
+    public class SeanceService(ISeanceRepository seanceRepository) : ISeanceService
     {
-        private readonly SeanceRepository _seanceRepository = seanceRepository;
+        private readonly ISeanceRepository _seanceRepository = seanceRepository;
 
         public void Add(Seance entity)
         {

@@ -5,9 +5,9 @@ using WebApp.Repositories;
 
 namespace WebApp.Services
 {
-    public class SalleService(SalleRepository salleRepository) : ICrudService<Salle, (string cinemaNom, int numero)>, IPaginatedService<Salle, BasePaginationParams, SalleFilterModel>
+    public class SalleService(ISalleRepository salleRepository) : ISalleService
     {
-        private readonly SalleRepository _salleRepository = salleRepository;
+        private readonly ISalleRepository _salleRepository = salleRepository;
 
         public List<Salle> GetAll()
         {

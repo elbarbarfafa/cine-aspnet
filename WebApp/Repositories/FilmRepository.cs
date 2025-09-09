@@ -3,7 +3,7 @@ using WebApp.Models.Entities;
 
 namespace WebApp.Repositories
 {
-    public class FilmRepository(MyContext dbContext) : ICrudRepository<Film, int>
+    public class FilmRepository(MyContext dbContext) : IFilmRepository
     {
         private readonly MyContext _dbContext = dbContext;
 

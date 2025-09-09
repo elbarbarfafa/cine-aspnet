@@ -6,7 +6,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApp.Repositories
 {
-    public class SalleRepository(MyContext context) : ICrudRepository<Salle, (string CinemaNom, int Numero)>
+    public class SalleRepository(MyContext context) : ISalleRepository
     {
         private readonly MyContext _context = context;
 
@@ -15,12 +15,6 @@ namespace WebApp.Repositories
             return _context.Salles.Find(entityId.CinemaNom, entityId.Numero) != null;
         }
 
-        /// <summary>
-        /// Supprime une salle spécifique d'un cinéma.
-        /// </summary>
-        /// <param name="cinemaNom"></param>
-        /// <param name="numero"></param>
-        /// <exception cref="KeyNotFoundException"></exception>
         public void Delete((string CinemaNom, int Numero) entityId)
         {
             Salle? salle = _context.Salles.Find(entityId.CinemaNom, entityId.Numero) ?? throw new KeyNotFoundException($"Salle with CinemaNom {entityId.CinemaNom} and Numero {entityId.Numero} not found.");
@@ -34,11 +28,7 @@ namespace WebApp.Repositories
             return [.. _context.Salles];
         }
 
-        /// <summary>
-        /// Récupère toutes les salles d'un cinéma spécifique.
-        /// </summary>
-        /// <param name="cinemaNom">Nom du cinéma</param>
-        /// <returns>Une liste des salles</returns>
+
         public List<Salle> GetAll(string cinemaNom)
         {
             if (string.IsNullOrWhiteSpace(cinemaNom))

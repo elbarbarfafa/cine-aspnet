@@ -8,9 +8,9 @@ using WebApp.Services;
 namespace WebApp.Controllers
 {
     [Authorize(Roles = "admin")]
-    public class CinemasController(CinemaService cinemaService) : Controller
+    public class CinemasController(ICinemaService cinemaService) : Controller
     {
-        private readonly CinemaService _cinemaService = cinemaService;
+        private readonly ICinemaService _cinemaService = cinemaService;
 
         public IActionResult Index(string searchString, int? pageNumber, int? pageSize)
         {

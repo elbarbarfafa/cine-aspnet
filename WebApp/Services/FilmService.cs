@@ -4,9 +4,9 @@ using WebApp.Repositories;
 
 namespace WebApp.Services
 {
-    public class FilmService(FilmRepository filmRepository) : ICrudService<Film, int>
+    public class FilmService(IFilmRepository filmRepository) : IFilmService
     {
-        private readonly FilmRepository _filmRepository = filmRepository;
+        private readonly IFilmRepository _filmRepository = filmRepository;
 
         public void Delete(int entityId)
         {
@@ -25,32 +25,11 @@ namespace WebApp.Services
 
         public void Add(Film entity)
         {
-            // Vous pourriez ajouter ici des validations métier supplémentaires
-            if (string.IsNullOrWhiteSpace(entity.Titre))
-            {
-                throw new ArgumentException("Le titre du film ne peut pas être vide.");
-            }
-
-            if (entity.Annee <= 1800)
-            {
-                throw new ArgumentException("L'année du film doit être supérieure à 1800.");
-            }
-
             _filmRepository.Insert(entity);
         }
 
         public void Update(Film entity)
         {
-            // Mêmes validations que pour l'insertion
-            if (string.IsNullOrWhiteSpace(entity.Titre))
-            {
-                throw new ArgumentException("Le titre du film ne peut pas être vide.");
-            }
-
-            if (entity.Annee <= 1800)
-            {
-                throw new ArgumentException("L'année du film doit être supérieure à 1800.");
-            }
             _filmRepository.Update(entity);
         }
 

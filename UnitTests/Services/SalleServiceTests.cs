@@ -9,12 +9,14 @@ namespace UnitTests.Services
 {
     public class SalleServiceTests
     {
-        private readonly SalleService _salleService;
+        private readonly ISalleService _salleService;
+        private readonly Mock<ISalleRepository> _mockRepository;
 
         public SalleServiceTests()
         {
-            var mockRepository = new Mock<SalleRepository>(Mock.Of<MyContext>());
-            _salleService = new SalleService(mockRepository.Object);
+            // Utiliser un mock de l'interface du repository
+            _mockRepository = new Mock<ISalleRepository>();
+            _salleService = new SalleService(_mockRepository.Object);
         }
 
         [Fact]

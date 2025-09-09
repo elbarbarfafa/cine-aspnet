@@ -12,11 +12,11 @@ namespace WebApp.Controllers
     /// Contrôleur principal de l'application gérant la page d'accueil et les fonctionnalités de recherche.
     /// Offre différents types de recherche : par cinéma, par film, et séances du jour.
     /// </summary>
-    public class HomeController(CinemaService cinemaService, FilmService filmService, SeanceService seanceService) : Controller
+    public class HomeController(ICinemaService cinemaService, IFilmService filmService, ISeanceService seanceService) : Controller
     {
-        private readonly CinemaService _cinemaService = cinemaService;
-        private readonly FilmService _filmService = filmService;
-        private readonly SeanceService _seanceService = seanceService;
+        private readonly ICinemaService _cinemaService = cinemaService;
+        private readonly IFilmService _filmService = filmService;
+        private readonly ISeanceService _seanceService = seanceService;
 
         /// <summary>
         /// Action principale de la page d'accueil.

@@ -16,9 +16,9 @@ using WebApp.Services;
 namespace WebApp.Controllers
 {
     [Authorize(Roles = "admin")]
-    public class SallesController(SalleService sallesService) : Controller
+    public class SallesController(ISalleService sallesService) : Controller
     {
-        private readonly SalleService _sallesService = sallesService;
+        private readonly ISalleService _sallesService = sallesService;
 
         public IActionResult Index(string cinemaNom,
             int? pageNumber,
@@ -161,6 +161,7 @@ namespace WebApp.Controllers
             }
 
             ViewData["CurrentCinema"] = cinemaNom;
+            ViewBag.SalleNumero = numero; // Maintenir le numéro de salle en cas d'erreur
             return View(viewModel);
         }
 

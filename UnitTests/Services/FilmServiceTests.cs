@@ -7,13 +7,14 @@ namespace UnitTests.Services
 {
     public class FilmServiceTests
     {
-        private readonly FilmService _filmService;
+        private readonly IFilmService _filmService;
+        private readonly Mock<IFilmRepository> _mockRepository;
 
         public FilmServiceTests()
         {
-            // Créer un FilmRepository mocké simple
-            var mockRepository = new Mock<FilmRepository>(Mock.Of<MyContext>());
-            _filmService = new FilmService(mockRepository.Object);
+            // Utiliser un mock de l'interface du repository
+            _mockRepository = new Mock<IFilmRepository>();
+            _filmService = new FilmService(_mockRepository.Object);
         }
 
         [Fact]
@@ -40,7 +41,7 @@ namespace UnitTests.Services
             var film = new Film
             {
                 Id = 1,
-                Titre = null,
+                Titre = null!,
                 Annee = 2023,
                 Genre = "Action"
             };
@@ -138,7 +139,6 @@ namespace UnitTests.Services
         [Theory]
         [InlineData("")]
         [InlineData("   ")]
-        [InlineData(null)]
         public void Add_FilmWithInvalidTitle_ThrowsArgumentException(string invalidTitle)
         {
             // Arrange
@@ -146,6 +146,24 @@ namespace UnitTests.Services
             {
                 Id = 1,
                 Titre = invalidTitle,
+                Annee = 2023,
+                Genre = "Action"
+            };
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => _filmService.Add(film));
+            Assert.Equal("Le titre du film ne peut pas être vide.", exception.Message);
+        }
+
+        [Fact]
+        public void Add_FilmWithNullTitle_InTheoryTest_ThrowsArgumentException()
+        {
+            // Test séparé pour le cas null pour éviter l'avertissement xUnit1012
+            // Arrange
+            var film = new Film
+            {
+                Id = 1,
+                Titre = null!,
                 Annee = 2023,
                 Genre = "Action"
             };

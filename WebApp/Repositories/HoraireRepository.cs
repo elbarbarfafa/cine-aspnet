@@ -2,7 +2,7 @@
 
 namespace WebApp.Repositories
 {
-    public class HoraireRepository(MyContext myContext) : ICrudRepository<Horaire, int>
+    public class HoraireRepository(MyContext myContext) : IHoraireRepository
     {
         private readonly MyContext _myContext = myContext;
 

@@ -9,17 +9,21 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionStringMyContext = builder.Configuration.GetConnectionString("CinePlusDb") ?? throw new InvalidOperationException("Connection string 'CinePlusDb' not found.");
 
 builder.Services.AddDbContext<MyContext>(options => options.UseSqlServer(connectionStringMyContext));
+
 // Injection de dépendances
-builder.Services.AddScoped<CinemaRepository>();
-builder.Services.AddScoped<SalleRepository>();
-builder.Services.AddScoped<FilmRepository>();
-builder.Services.AddScoped<SeanceRepository>();
-builder.Services.AddScoped<HoraireRepository>();
-builder.Services.AddScoped<CinemaService>();
-builder.Services.AddScoped<SalleService>();
-builder.Services.AddScoped<FilmService>();
-builder.Services.AddScoped<SeanceService>();
-builder.Services.AddScoped<HoraireService>();
+// REPOSITORIES
+builder.Services.AddScoped<ICinemaRepository, CinemaRepository>();
+builder.Services.AddScoped<ISalleRepository, SalleRepository>();
+builder.Services.AddScoped<IFilmRepository, FilmRepository>();
+builder.Services.AddScoped<ISeanceRepository, SeanceRepository>();
+builder.Services.AddScoped<IHoraireRepository, HoraireRepository>();
+// Injection de dépendances
+// SERVICES
+builder.Services.AddScoped<ICinemaService, CinemaService>();
+builder.Services.AddScoped<ISalleService, SalleService>();
+builder.Services.AddScoped<IFilmService, FilmService>();
+builder.Services.AddScoped<ISeanceService, SeanceService>();
+builder.Services.AddScoped<IHoraireService, HoraireService>();
 builder.Services.AddDefaultIdentity<Admin>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<MyContext>();
 builder.Services.AddRazorPages();
 

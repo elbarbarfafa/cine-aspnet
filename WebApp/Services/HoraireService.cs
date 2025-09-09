@@ -3,9 +3,9 @@ using WebApp.Repositories;
 
 namespace WebApp.Services
 {
-    public class HoraireService(HoraireRepository horaireRepository) : ICrudService<Horaire, int>
+    public class HoraireService(IHoraireRepository horaireRepository) : IHoraireService
     {
-        private readonly HoraireRepository _horaireRepository = horaireRepository;
+        private readonly IHoraireRepository _horaireRepository = horaireRepository;
         public void Add(Horaire entity)
         {
             throw new NotImplementedException();

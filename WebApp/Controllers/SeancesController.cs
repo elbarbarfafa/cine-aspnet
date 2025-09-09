@@ -10,12 +10,12 @@ namespace WebApp.Controllers
 {
     [Route("Films/{filmId}/Seances")]
     [Authorize(Roles = "admin")]
-    public class SeancesController(SeanceService seanceService, FilmService filmService, SalleService sallesService, HoraireService horaireService) : Controller
+    public class SeancesController(ISeanceService seanceService, IFilmService filmService, ISalleService sallesService, IHoraireService horaireService) : Controller
     {
-        private readonly SeanceService _seanceService = seanceService;
-        private readonly FilmService _filmService = filmService;
-        private readonly SalleService _sallesService = sallesService;
-        private readonly HoraireService _horaireService = horaireService;
+        private readonly ISeanceService _seanceService = seanceService;
+        private readonly IFilmService _filmService = filmService;
+        private readonly ISalleService _sallesService = sallesService;
+        private readonly IHoraireService _horaireService = horaireService;
 
         // GET: Films/5/Seances
         [HttpGet("")]

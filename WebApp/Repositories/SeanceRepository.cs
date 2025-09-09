@@ -4,7 +4,7 @@ using WebApp.Models.ViewModels.Seance;
 
 namespace WebApp.Repositories
 {
-    public class SeanceRepository(MyContext myContext) : ICrudRepository<Seance, int>
+    public class SeanceRepository(MyContext myContext) : ISeanceRepository
     {
         private readonly MyContext _myContext = myContext;
 
